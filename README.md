@@ -1,3 +1,7 @@
+## LDflow
+
+`ldflow` (Lagrangian Descriptors in flows) builds on top of [`ldds`](https://github.com/champsproject/ldds) to make it (easily) usable with fluid flows.
+
 # Install
 To create a dedicated virtual environment, use
 ``` bash
@@ -11,21 +15,23 @@ Install the `ldds` package with
 pip install git+https://github.com/champsproject/ldds.git
 ```
 
-Download the `ldflow` repository
+Clone the `ldflow` repository
 ```bash
-git clone 
+git clone git@github.com:auroreloisy/ldflow.git
 ```
 
 # Usage
 
 Use `plot_cube.py` to visualize Lagrangian structures on the faces of a cube.
 
- <p style="text-align:center">
+<div align="center">
 <img src="img/cube.png">
-</p>
+</div>
  
 Use `plot_section.py` to plot quantities of interest in a section.
-
+<div align="center">
+<img src="img/section.png">
+ </div>
 
 
 
