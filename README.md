@@ -1,6 +1,6 @@
 ## LDflow
 
-`ldflow` (Lagrangian Descriptors in flows) builds on top of [`ldds`](https://github.com/champsproject/ldds) to make it (easily) usable with fluid flows.
+`ldflow` (Lagrangian Descriptors in flows) builds on top of [`ldds`](https://github.com/champsproject/ldds) to make it (easily) usable for Lagrangian particles in fluid flows.
 
 # Install
 To create a dedicated virtual environment, use
