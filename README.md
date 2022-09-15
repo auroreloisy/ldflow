@@ -32,6 +32,8 @@ Use `plot_section.py` to plot quantities of interest in a section.
 <div align="center">
 <img src="img/section.png">
  </div>
+ 
+Change parameters directly within the scripts.
 
 
 
