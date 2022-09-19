@@ -4,22 +4,26 @@ from mpl_toolkits.mplot3d import Axes3D
 from ldflow.ld import compute_lagrangian_descriptor
 
 
-def _integrate(field, n_points, tau, p_value):
+def _integrate(field, parameters):
+    n_points = parameters["n_points"]
+    tau = parameters["tau"]
+    p_value = parameters["p_value"]
+
     # forward integration
     _, x_plane = compute_lagrangian_descriptor(
-        parameters={"section": "x", "value": 0, "Npoints": n_points},
+        parameters={"section": "x", "value": 0, "n_points": n_points},
         vector_field=field,
         tau=tau,
         p_value=p_value,
     )
     _, y_plane = compute_lagrangian_descriptor(
-        parameters={"section": "y", "value": 0, "Npoints": n_points},
+        parameters={"section": "y", "value": 0, "n_points": n_points},
         vector_field=field,
         tau=tau,
         p_value=p_value,
     )
     _, z_plane = compute_lagrangian_descriptor(
-        parameters={"section": "z", "value": 0, "Npoints": n_points},
+        parameters={"section": "z", "value": 0, "n_points": n_points},
         vector_field=field,
         tau=tau,
         p_value=p_value,
@@ -28,13 +32,13 @@ def _integrate(field, n_points, tau, p_value):
     return x_plane, y_plane, z_plane
 
 
-def _transform(planes, show_gradient):
+def _transform(planes, show_gradient, power):
     if show_gradient:
         def _get_gradient_magnitude(ld):
             gradient_x, gradient_y = np.gradient(ld)
             g = np.sqrt(gradient_x ** 2 + gradient_y ** 2)
             g = _normalize(g)
-            g = g ** 0.75  # tweak to make features stand out
+            g = g ** power  # tweak to make features stand out
             return g
 
         def _normalize(A):
@@ -48,7 +52,10 @@ def _transform(planes, show_gradient):
         return planes
 
 
-def _plot(planes, n_points, tau, p_value, colormap):
+def _plot(planes, parameters):
+    n_points = parameters["n_points"]
+    colormap = parameters["colormap"]
+
     vmin = min([np.min(planes[i]) for i in range(3)])
     vmax = max([np.max(planes[i]) for i in range(3)])
 
@@ -111,17 +118,19 @@ def _plot(planes, n_points, tau, p_value, colormap):
     plt.axis('off')
 
     # Titles
-    plt.annotate("p = " + str(p_value) + ", tau = " + str(tau),
+    plt.annotate("flow = " + str(parameters["flow"])
+                 + ", p = " + str(parameters["p_value"])
+                 + ", tau = " + str(parameters["tau"]),
                  xy=(0.5, 0.96), xycoords="figure fraction", fontsize=12, ha='center'
                  )
 
     plt.show()
 
 
-def make_cube(field, n_points, tau, p_value, show_gradient, colormap):
+def make_cube(field, parameters):
 
-    planes = _integrate(field, n_points, tau, p_value)
-    planes = _transform(planes, show_gradient)
-    _plot(planes, n_points, tau, p_value, colormap)
+    planes = _integrate(field, parameters)
+    planes = _transform(planes, parameters["gradient"], parameters["gradient_power"])
+    _plot(planes, parameters)
 
 

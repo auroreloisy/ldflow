@@ -1,28 +1,39 @@
 import numpy as np
 from ldflow.cube import make_cube
-from ldflow.flow import abc
+from ldflow.flow import abc, tgv_2d, turb_frozen
 
+PARAMETERS = {
+    "flow": "abc",  # "abc", tgv_2d, "turb_frozen_3d"
+    "n_points": 200,  # number of point along each dimension
+    "tau": 20,  # integration time
+    "p_value": 2,  # Lp norm
+    "gradient": True,  # plot gradient of LD instead of LD
+    "gradient_power": 0.75,  # tweak to make features stand out
+    "colormap": 'afmhot'  # "afmhot", "bone", "bone_r"
+}
 
-N_POINTS = 200  # number of point along each dimension
-TAU = 20  # integration time
-P_VALUE = 2  # Lp norm
-GRADIENT = True  # plot gradient of LD instead of LD
-COLORMAP = 'afmhot'  # "afmhot", "bone", "bone_r"
+if PARAMETERS["flow"] == "abc":
 
+    field = abc(a=np.sqrt(3), b=np.sqrt(2), c=1.0)
 
-def field(t, u):
-    v = abc(t, u, parameters=(np.sqrt(3), np.sqrt(2), 1))
-    return v
+elif PARAMETERS["flow"] == "tgv_2d":
+
+    field = tgv_2d()
+
+elif PARAMETERS["flow"] == "turb_frozen_3d":
+
+    # field = turb_frozen(n_grid=128, file='v000121.csv', print_info=True)
+    # field = turb_frozen(n_grid=128, file='v006018.csv', print_info=True)
+    field = turb_frozen(n_grid=128, file='v014863.csv', print_info=True)
+
+else:
+    raise Exception("This flow is not implemented")
 
 
 def run():
     make_cube(
         field=field,
-        n_points=N_POINTS,
-        tau=TAU,
-        p_value=P_VALUE,
-        show_gradient=GRADIENT,
-        colormap=COLORMAP,
+        parameters=PARAMETERS,
     )
 
 

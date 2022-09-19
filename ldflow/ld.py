@@ -13,7 +13,7 @@ def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, bo
     parameters : dictionary containing
         'section': 'x', 'y' or 'z'
         'value': float
-        'Npoints': int, number of points in each dimension
+        'n_points': int, number of points in each dimension
 
     vector_field: function
         flow
@@ -57,7 +57,7 @@ def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, bo
 
     ax1_min, ax1_max = [0, 2 * np.pi]
     ax2_min, ax2_max = [0, 2 * np.pi]
-    N = parameters["Npoints"]
+    N = parameters["n_points"]
     slice_parameters = [[ax1_min, ax1_max, N], [ax2_min, ax2_max, N]]
 
     grid_parameters = {
@@ -93,14 +93,14 @@ def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, bo
         mask_y0 = np.transpose([mask for i in range(N_dim + 1)]).flatten()
         y0 = ma.masked_array(y0, mask=mask_y0)
 
-    solution = solve_ivp(f, [0, tau], y0, t_eval=[tau], rtol=rtol, atol=1.0e-12)
+    solution = solve_ivp(f, [0, tau], y0, t_eval=[tau], rtol=rtol, atol=1.0e-6, first_step=1e-6)
 
     N_points_slice_axes = slice_parameters[:, -1].astype('int')
 
     # displacement along the 3 axes
     displacement = []
     for i in range(3):
-        d = solution.y[i::N_dim + 1]  # displacement along i-axis
+        d = solution.y[i::N_dim + 1] - y0[i::N_dim + 1, np.newaxis]  # displacement along i-axis
         d = d.reshape(*N_points_slice_axes)  # reshape to 2-D array
         displacement.append(d)
 

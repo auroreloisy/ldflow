@@ -4,10 +4,13 @@ import matplotlib.pyplot as plt
 from ldflow.ld import compute_lagrangian_descriptor
 
 
-def _integrate(field, parameters, tau, p_value):
+def _integrate(field, parameters):
+    tau = parameters["tau"]
+    p_value = parameters["p_value"]
+
     # forward integration
     d_forward, ld_forward = compute_lagrangian_descriptor(
-        parameters=parameters,
+        parameters={"section": parameters["section"], "value": parameters["value"], "n_points": parameters["n_points"]},
         vector_field=field,
         tau=tau,
         p_value=p_value,
@@ -15,7 +18,7 @@ def _integrate(field, parameters, tau, p_value):
 
     # backward integration
     _, ld_backward = compute_lagrangian_descriptor(
-        parameters=parameters,
+        parameters={"section": parameters["section"], "value": parameters["value"], "n_points": parameters["n_points"]},
         vector_field=field,
         tau=-tau,
         p_value=p_value,
@@ -34,7 +37,7 @@ def _normalize(A):
     return (A - np.nanmin(A)) / (np.nanmax(A) - np.nanmin(A))
 
 
-def _plot(displacement, ld_forward, ld_backward, parameters, tau, p_value):
+def _plot(displacement, ld_forward, ld_backward, parameters):
     # gradient
     ld_f_grad = _get_gradient_magnitude(ld_forward)
     ld_b_grad = -_get_gradient_magnitude(ld_backward)
@@ -45,7 +48,7 @@ def _plot(displacement, ld_forward, ld_backward, parameters, tau, p_value):
     amp1 = max([np.max(np.abs([displacement[i]])) for i in range(3)])
 
     levels = 100
-    points = np.linspace(0, 2* np.pi, parameters["Npoints"])
+    points = np.linspace(0, 2 * np.pi, parameters["n_points"])
     fig, ax = plt.subplots(2, 3)
 
     def _vmin(k):
@@ -94,8 +97,10 @@ def _plot(displacement, ld_forward, ld_backward, parameters, tau, p_value):
     ax[1, 0].title.set_text("x-displacement")
     ax[1, 1].title.set_text("y-displacement")
     ax[1, 2].title.set_text("z-displacement")
-    plt.annotate("p = " + str(p_value) + ", tau = " + str(tau) +
-                 ", section " + parameters["section"] + " = " + str(parameters["value"]),
+    plt.annotate("flow = " + str(parameters["flow"])
+                 + ", p = " + str(parameters["p_value"])
+                 + ", tau = " + str(parameters["tau"])
+                 + ", section " + parameters["section"] + " = " + str(parameters["value"]),
                  xy=(0.5, 0.96), xycoords="figure fraction", fontsize=12, ha='center'
                  )
 
@@ -110,9 +115,9 @@ def _plot(displacement, ld_forward, ld_backward, parameters, tau, p_value):
     plt.show()
 
 
-def make_section(field, parameters, tau, p_value):
+def make_section(field, parameters):
 
-    d_forward, ld_forward, ld_backward = _integrate(field, parameters, tau, p_value)
-    _plot(d_forward, ld_forward, ld_backward, parameters, tau, p_value)
+    d_forward, ld_forward, ld_backward = _integrate(field, parameters)
+    _plot(d_forward, ld_forward, ld_backward, parameters)
 
 
