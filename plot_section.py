@@ -1,3 +1,4 @@
+"""Plot displacement and LD in a section (plane in physical space)"""
 import numpy as np
 from ldflow.flow import abc, turb_frozen, tgv_2d
 from ldflow.section import make_section

@@ -3,6 +3,7 @@ from scipy.interpolate import RegularGridInterpolator
 
 
 def tgv_2d():
+    """Taylor-Green vortices (2D stationary, invariant along z)"""
     def vector_field(t, u):
         x, y, z, w = u.T    # w is just a hack (requires even number of vars)
         v_x = np.cos(x) * np.sin(y)
@@ -15,7 +16,7 @@ def tgv_2d():
 
 
 def abc(a=np.sqrt(3), b=np.sqrt(2), c=1):
-
+    """ABC flow (3D stationary)"""
     def vector_field(t, u):
         """
         Parameters
@@ -43,6 +44,7 @@ def abc(a=np.sqrt(3), b=np.sqrt(2), c=1):
 
 
 def turb_frozen(n_grid=128, file='v006018.csv', print_info=False):
+    """Frozen 3D HIT"""
     # csv are columns: vx, vy, vz with a header
     dat = np.genfromtxt('./data/turb_frozen/' + file, delimiter=',', skip_header=1)
     assert dat.shape[0] == n_grid ** 3

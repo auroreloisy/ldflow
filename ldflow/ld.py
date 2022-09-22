@@ -6,7 +6,8 @@ import ldds.base
 
 def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, box_boundaries=False, rtol=1.0e-4):
     """
-    Returns the values of the LD function from integrated trajectories from initial conditions in phase space.
+    Returns the values of the total displacement and the LD function from integrated trajectories starting in
+    a section.
 
     Parameters
     ----------
@@ -16,7 +17,7 @@ def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, bo
         'n_points': int, number of points in each dimension
 
     vector_field: function
-        flow
+        Flow
 
     tau : float
         Upper limit of integration.
@@ -38,6 +39,8 @@ def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, bo
 
     Returns
     -------
+    displacement: list [ndarray, ndarray, ndarray] with ndarray shape (Nx, Ny)
+        Arrays of total displacement along the 3 directions
     LD : ndarray, shape (Nx, Ny)
         Array of computed Lagrangian descriptor values for all initial conditions.
     """

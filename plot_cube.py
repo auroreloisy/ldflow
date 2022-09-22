@@ -1,3 +1,4 @@
+"""Plot LD on the faces of a cube to highlight flow structures"""
 import numpy as np
 from ldflow.cube import make_cube
 from ldflow.flow import abc, tgv_2d, turb_frozen
