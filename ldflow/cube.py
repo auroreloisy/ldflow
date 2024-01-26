@@ -63,7 +63,7 @@ def _plot(planes, parameters):
     points = np.linspace(0, 2 * np.pi, n_points)
 
     fig = plt.figure()
-    ax = fig.gca(projection='3d')
+    ax = fig.add_subplot(projection='3d')
 
     X = points
     Y = points
