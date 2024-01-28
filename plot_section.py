@@ -4,7 +4,7 @@ from ldflow.flow import abc, turb_frozen, tgv_2d
 from ldflow.section import make_section
 
 PARAMETERS = {
-    "flow": "abc",  # "abc", tgv_2d, "turb_frozen_3d"
+    "flow": "abc",  # "abc", "tgv_2d", "turb_frozen_3d"
     "section": "z",
     "value": 0,
     "n_points": 200,  # number of point along each dimension
