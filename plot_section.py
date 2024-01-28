@@ -9,7 +9,8 @@ PARAMETERS = {
     "value": 0,
     "n_points": 200,  # number of point along each dimension
     "tau": 20,  # integration time
-    "p_value": 2  # Lp norm
+    "p_value": 2,  # Lp norm
+    "gradient_power": 0.75,  # tweak to make features stand out
 }
 
 if PARAMETERS["flow"] == "abc":
