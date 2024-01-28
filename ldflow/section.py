@@ -27,10 +27,12 @@ def _integrate(field, parameters):
     return d_forward, ld_forward, ld_backward
 
 
-def _get_gradient_magnitude(ld):
+def _get_gradient_magnitude(ld, power):
     gradient_x, gradient_y = np.gradient(ld)
     g = np.sqrt(gradient_x**2 + gradient_y**2)
-    return _normalize(g)
+    g = _normalize(g)
+    g = g ** power  # tweak to make features stand out
+    return g
 
 
 def _normalize(A):
@@ -39,12 +41,11 @@ def _normalize(A):
 
 def _plot(displacement, ld_forward, ld_backward, parameters):
     # gradient
-    ld_f_grad = _get_gradient_magnitude(ld_forward)
-    ld_b_grad = -_get_gradient_magnitude(ld_backward)
-    grad = ld_f_grad + ld_b_grad
+    ld_f_grad = _get_gradient_magnitude(ld_forward, parameters["gradient_power"])
+    # ld_b_grad = -_get_gradient_magnitude(ld_backward, parameters["gradient_power"])
+    grad = ld_f_grad  # + ld_b_grad
 
     # scaling colors
-    amp0 = np.max(np.abs(grad))
     amp1 = max([np.max(np.abs([displacement[i]])) for i in range(3)])
 
     levels = 100
@@ -55,7 +56,7 @@ def _plot(displacement, ld_forward, ld_backward, parameters):
         if k == 0 or k == 1:
             vmin = 0
         elif k == 2:
-            vmin = - amp0
+            vmin = np.min(grad)
         else:
             vmin = -amp1
         return vmin
@@ -64,7 +65,7 @@ def _plot(displacement, ld_forward, ld_backward, parameters):
         if k == 0 or k == 1:
             vmax = 1
         elif k == 2:
-            vmax = amp0
+            vmax = np.max(grad)
         else:
             vmax = amp1
         return vmax
@@ -75,7 +76,7 @@ def _plot(displacement, ld_forward, ld_backward, parameters):
         elif k == 1:
             cmap = 'Oranges_r'
         elif k == 2:
-            cmap = 'PuOr'
+            cmap = 'afmhot'
         else:
             cmap = 'RdBu_r'
         return cmap
@@ -93,7 +94,7 @@ def _plot(displacement, ld_forward, ld_backward, parameters):
     # Titles
     ax[0, 0].title.set_text("forward LD")
     ax[0, 1].title.set_text("backward LD")
-    ax[0, 2].title.set_text("gradient magnitude")
+    ax[0, 2].title.set_text("gradient magnitude (qualitative scale)")
     ax[1, 0].title.set_text("x-displacement")
     ax[1, 1].title.set_text("y-displacement")
     ax[1, 2].title.set_text("z-displacement")
