@@ -4,7 +4,7 @@ from ldflow.cube import make_cube
 from ldflow.flow import abc, tgv_2d, turb_frozen
 
 PARAMETERS = {
-    "flow": "abc",  # "abc", tgv_2d, "turb_frozen_3d"
+    "flow": "abc",  # "abc", "tgv_2d", "turb_frozen_3d"
     "n_points": 200,  # number of point along each dimension
     "tau": 20,  # integration time
     "p_value": 2,  # Lp norm
