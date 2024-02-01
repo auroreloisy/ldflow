@@ -10,7 +10,8 @@ PARAMETERS = {
     "p_value": 2,  # Lp norm
     "gradient": True,  # plot gradient of LD instead of LD
     "gradient_power": 0.75,  # tweak to make features stand out
-    "colormap": 'afmhot'  # "afmhot", "bone", "bone_r"
+    "colormap": 'afmhot',  # "afmhot", "bone"
+    "show_colorbar": True,  # whether to show the colorbar on the plot
 }
 
 if PARAMETERS["flow"] == "abc":
