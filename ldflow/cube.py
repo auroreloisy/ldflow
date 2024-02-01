@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from ldflow.ld import compute_lagrangian_descriptor
@@ -55,6 +56,7 @@ def _transform(planes, show_gradient, power):
 def _plot(planes, parameters):
     n_points = parameters["n_points"]
     colormap = parameters["colormap"]
+    show_colorbar = parameters["show_colorbar"]
 
     vmin = min([np.min(planes[i]) for i in range(3)])
     vmax = max([np.max(planes[i]) for i in range(3)])
@@ -62,7 +64,7 @@ def _plot(planes, parameters):
     levels = 100
     points = np.linspace(0, 2 * np.pi, n_points)
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(13 if show_colorbar else 10, 10))
     ax = fig.add_subplot(projection='3d')
 
     X = points
@@ -108,7 +110,10 @@ def _plot(planes, parameters):
     # setting 3D-axis-limits:
     ax.set_xlim3d(0, 2*np.pi)
     ax.set_ylim3d(0, 2*np.pi)
-    ax.set_zlim3d(0, 1.7*np.pi)  # tweak for adjusting aspect ratio
+    if show_colorbar:
+        ax.set_zlim3d(0, 1.65 * np.pi)  # tweak for adjusting aspect ratio
+    else:
+        ax.set_zlim3d(0, 1.65 * np.pi)  # tweak for adjusting aspect ratio
 
     # ax.set_xlabel("x")
     # ax.set_ylabel("y")
@@ -124,6 +129,23 @@ def _plot(planes, parameters):
                  xy=(0.5, 0.96), xycoords="figure fraction", fontsize=12, ha='center'
                  )
 
+    if show_colorbar:
+        cb = fig.colorbar(
+            mappable=matplotlib.cm.ScalarMappable(norm=matplotlib.colors.Normalize(vmin=0, vmax=1), cmap=colormap),
+            anchor=(0.4, 0.92),
+            shrink=0.91,
+            ticks=(0, 1),
+            ax=ax
+        )
+        if parameters["p_value"] == 2:
+            if parameters["gradient"]:
+                label = '| gradient (travelled distance) |'
+            else:
+                label = 'travelled distance'
+        else:
+            label = ''
+        cb.set_label(label=label, size=15, labelpad=-5)
+        cb.set_ticklabels(['min', 'max'], size=12)
     plt.show()
 
 
