@@ -85,7 +85,7 @@ def compute_lagrangian_descriptor(parameters, vector_field, tau, p_value=0.5, bo
 
     # set boundaries for escape-box condition, if not defined
     if not box_boundaries:
-        box_boundaries = int(N_dim / 2) * [[-np.infty, np.infty]]  # restricted to configuration space
+        box_boundaries = int(N_dim / 2) * [[-np.inf, np.inf]]  # restricted to configuration space
 
     # solve initial value problem
     f = lambda t, y: ldds.base.vector_field_flat(t, y, vector_field, p_value, box_boundaries)
